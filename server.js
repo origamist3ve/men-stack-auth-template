@@ -6,6 +6,8 @@ const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 const morgan = require('morgan');
 
+const authController = require('./controllers/auth');
+
 const port = process.env.PORT || '3000';
 
 mongoose.connect(process.env.MONGODB_URI);
@@ -21,6 +23,8 @@ app.use(methodOverride('_method'));
 app.get('/', async (req, res) => {
   res.render('index.ejs');
 });
+
+app.use('/auth', authController)
 
 app.listen(port, () => {
   console.log(`The express app is ready on port ${port}!`);
