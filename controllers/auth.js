@@ -1,11 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
 
 const User = require('../models/user.js');
 
 router.get('/sign-up', (req, res) => {
   res.render('auth/sign-up.ejs');
+});
+
+router.get('/sign-in', (req, res) => {
+  res.render('auth/sign-in.ejs');
 });
 
 router.post('/sign-up', async (req, res) => {
@@ -28,7 +32,7 @@ router.post('/sign-up', async (req, res) => {
   // All ready to create the new user!
   const user = await User.create(req.body);
 
-  res.send(`Thanks for signing up ${user.username}`)
+  res.send(`Thanks for signing up ${user.username}`);
 });
 
 module.exports = router;
