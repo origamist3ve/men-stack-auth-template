@@ -13,7 +13,7 @@ router.get('/sign-in', (req, res) => {
 });
 
 router.get('/sign-out', (req, res) => {
-  req.session.user = null;
+  req.session.destroy();
   res.redirect('/');
 });
 
