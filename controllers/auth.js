@@ -12,6 +12,11 @@ router.get('/sign-in', (req, res) => {
   res.render('auth/sign-in.ejs');
 });
 
+router.get('/sign-out', (req, res) => {
+  req.session.user = null;
+  res.redirect('/');
+});
+
 router.post('/sign-up', async (req, res) => {
   // Check if the username is already taken
   const userInDatabase = await User.findOne({ username: req.body.username });
