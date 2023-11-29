@@ -7,7 +7,7 @@ const methodOverride = require('method-override');
 const morgan = require('morgan');
 const session = require('express-session');
 
-const authController = require('./controllers/auth');
+const authController = require('./controllers/auth.js');
 
 const port = process.env.PORT ? process.env.PORT : '3000';
 
