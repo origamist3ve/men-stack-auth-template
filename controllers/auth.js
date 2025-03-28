@@ -5,11 +5,11 @@ import User from "../models/user.js";
 const router = express.Router();
 
 router.get("/sign-up", (req, res) => {
-  res.render("auth/sign-up.ejs");
+  res.render("auth/sign-up.ejs", { user: {} });
 });
 
 router.get("/sign-in", (req, res) => {
-  res.render("auth/sign-in.ejs");
+  res.render("auth/sign-in.ejs", { user: {} });
 });
 
 router.get("/sign-out", (req, res) => {
@@ -55,8 +55,8 @@ router.post("/sign-in", async (req, res) => {
 
     // There is a user! Time to test their password with bcrypt
     const validPassword = bcrypt.compareSync(
-      req.body.password,
-      userInDatabase.password
+        req.body.password,
+        userInDatabase.password
     );
     if (!validPassword) {
       return res.send("Login failed. Please try again.");
