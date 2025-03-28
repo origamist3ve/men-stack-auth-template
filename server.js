@@ -4,18 +4,25 @@ import methodOverride from "method-override";
 import morgan from "morgan";
 import session from "express-session";
 import express from "express";
+import path from "path";
+
 
 import authController from "./controllers/auth.js";
 import applicationsController from "./controllers/applications.js";
 import { isSignedIn } from "./middleware/isSignedIn.js";
 import { passUserToView } from "./middleware/passToView.js";
+import { fileURLToPath } from "url";
+
 
 import "./db/connection.js";
 
+
+const __dirname = path.resolve();
 const app = express();
 const port = process.env.PORT ? process.env.PORT : "3000";
 
 app.set("view engine", "ejs");
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: false }));
 app.use(methodOverride("_method"));
 app.use(morgan("dev"));

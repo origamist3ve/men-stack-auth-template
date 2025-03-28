@@ -28,6 +28,24 @@ router.get("/new", (req, res) => {
     }
 });
 
+router.get("/:applicationId/edit", async (req, res) => {
+    try {
+        const { applicationId } = req.params;
+        const user = await User.findById(req.session.user);
+        const application = user.applications.find((app) => {
+            return app._id.toString() === applicationId;
+        });
+
+        res.render("applications/edit", {
+            user: req.session.user,
+            application: application,
+        });
+    } catch (error) {
+        console.error(error);
+        // TODO create an error template and render
+    }
+});
+
 router.get("/:applicationId", async (req, res) => {
     try {
         const { applicationId } = req.params;
@@ -73,23 +91,50 @@ router.post("/", async (req, res) => {
 });
 
 // PUT
+router.put("/:applicationId", async (req, res) => {
+    try {
+        // get the app id
+        const { applicationId } = req.params;
+        const { company, title, notes, postingLink, status } = req.body;
+        // find the application via id
+        const user = await User.findById(req.session.user._id);
+        let application = user.applications.id(applicationId);
+        application.set({
+            company,
+            title,
+            notes,
+            postingLink,
+            status,
+        });
+
+        await user.save();
+        // redirect the peeps to the right place
+        res.redirect(`/users/${req.session.user._id}/applications`);
+    } catch (error) {
+        console.error(error);
+        // TODO create an error template and render
+    }
+});
 
 // DELETE
 router.delete("/:applicationId", async (req, res) => {
     try {
-        // get the App id
         const { applicationId } = req.params;
-        // Find the application and delete it
         const user = await User.findById(req.session.user._id);
-        user.applications.forEach((app,index) => {
+
+        // Option 1
+        user.applications.forEach((app, index) => {
             if (app._id.toString() === applicationId) {
                 user.applications.splice(index, 1);
             }
-        })
-        await user.save()
-        // Redirect
-        res.redirect(`/users/${req.session.user._id}/applications`);
+        });
 
+        // Option 2
+        // user.applications.id(applicationId).deleteOne();
+
+        await user.save();
+
+        res.redirect(`/users/${req.session.user._id}/applications`);
     } catch (error) {
         console.error(error);
         // TODO create an error template and render
